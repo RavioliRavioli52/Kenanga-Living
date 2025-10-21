@@ -42,4 +42,3 @@ Route::get('/wishlist', function () {
     return view('homepage.wishlist'); // Mengarahkan ke resources/views/homepages/wishlist.blade.php
 })->name('wishlist');
 
-require __DIR__.'/auth.php';
