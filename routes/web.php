@@ -1,12 +1,21 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// Route untuk halaman utama, kemungkinan menggunakan index.blade.php
-// Jika Anda ingin menggunakan index.blade.php dari folder homepages
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
 Route::get('/', function () {
     return view('homepage.home');
-})->name('home'); // <-- Tambahkan nama route
+})->name('home');
 
 // Route untuk halaman About
 Route::get('/about', function () {
@@ -32,3 +41,5 @@ Route::get('/shop-single', function () {
 Route::get('/wishlist', function () {
     return view('homepage.wishlist'); // Mengarahkan ke resources/views/homepages/wishlist.blade.php
 })->name('wishlist');
+
+require __DIR__.'/auth.php';
