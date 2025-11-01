@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -7,6 +8,21 @@ Route::middleware(['web'])->group(function () {
     Route::get('/', fn() => redirect()->route('home'));
     Route::get('/home', fn() => view('homepage.home'))->name('home');
 });
+
+Route::group(['middleware' => ['web','auth'],'prefix' => 'admin', 'as' => 'admin.'], function() {
+    Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard.index');
+});
+
+Route::get('/whoami', function () {
+    if (auth()->check()) {
+        return response()->json([
+            'logged_in' => true,
+            'user' => auth()->user(),
+        ]);
+    }
+    return response()->json(['logged_in' => false]);
+});
+
 
 // Route untuk halaman About
 Route::get('/about', function () {
