@@ -18,7 +18,6 @@ class AdminUserSeeder extends Seeder
             'role' => 'admin',
             'alamat' => 'Jl. Admin No.1',          // isi sesuai kebutuhan
             'no_hp' => '08123456789',              // isi sesuai kebutuhan
-            'email_verified_at' => now(),
         ]);
 
         $this->command->info('Admin user berhasil dibuat!');
