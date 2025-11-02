@@ -15,9 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-<<<<<<< HEAD
-        // User::factory(10)->create();
-
+        // Tambahkan user default
         User::create([
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -27,8 +25,7 @@ class DatabaseSeeder extends Seeder
             'no_hp' => '08123456789',
         ]);
 
-=======
->>>>>>> 8f8001d62e0ee4025f44db1b0e11eb82d494c1cc
+        // Jalankan seeder tambahan
         $this->call([
             AdminUserSeeder::class,
             CategorySeeder::class,
