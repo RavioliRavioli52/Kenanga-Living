@@ -23,10 +23,6 @@ class CategorySeeder extends Seeder
                 'deskripsi' => 'Meja makan, meja kerja, meja kopi, dan meja lainnya dengan berbagai desain',
             ],
             [
-                'nama_categories' => 'Sofa',
-                'deskripsi' => 'Sofa dan kursi panjang yang nyaman untuk ruang tamu Anda',
-            ],
-            [
                 'nama_categories' => 'Lemari',
                 'deskripsi' => 'Lemari pakaian, lemari dapur, dan lemari penyimpanan berbagai ukuran',
             ],

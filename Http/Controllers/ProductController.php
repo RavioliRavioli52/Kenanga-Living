@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Review;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -57,13 +56,11 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::with('category')->findOrFail($id);
-
-        // Ambil ulasan produk
-        $reviews = Review::where('id_products', $id)->with('user')->latest()->get();
-
         $relatedProducts = Product::where('id_categories', $product->id_categories)
-            ->where('id_products', '!=', $id)->limit(4)->get();
+            ->where('id_products', '!=', $id)
+            ->limit(4)
+            ->get();
 
-        return view('homepage.shop-single', compact('product', 'relatedProducts', 'reviews'));
+        return view('homepage.shop-single', compact('product', 'relatedProducts'));
     }
 }

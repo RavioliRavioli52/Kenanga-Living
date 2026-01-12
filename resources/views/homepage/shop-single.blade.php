@@ -58,13 +58,40 @@
                         <h6>Description:</h6>
                         <p>{{ $product->deskripsi }}</p>
 
-                        <div class="row pb-3">
-                            <div class="col d-grid">
-                                <a href="#" class="btn btn-success btn-lg">
-                                    Add To Cart
-                                </a>
+                       <form action="{{ route('cart.add', $product->id_products) }}" method="POST">
+                            @csrf
+                            <div class="row pb-3">
+                                <div class="col-md-6 mb-3">
+                                    <label for="quantity">Jumlah (Stok Tersedia: {{ $product->stok }})</label>
+                                    <div class="input-group">
+                                        <input type="number" name="quantity" class="form-control" 
+                                            value="1" min="1" max="{{ $product->stok }}" 
+                                            {{ $product->stok <= 0 ? 'disabled' : '' }} required>
+                                    </div>
+                                </div>
+                                <div class="col d-grid">
+                                    @if($product->stok > 0)
+                                        <button type="submit" class="btn btn-success btn-lg">Add To Cart</button>
+                                    @else
+                                        <button type="button" class="btn btn-secondary btn-lg" disabled>Stok Habis</button>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
+                        </form>
+
+                        {{-- Tambahkan Alert Error jika stok tidak cukup --}}
+                        @if(session('error'))
+                            <div class="alert alert-danger mt-3">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
+                        {{-- Tampilkan Alert Sukses --}}
+                        @if(session('success'))
+                            <div class="alert alert-success mt-3">
+                                {{ session('success') }}
+                            </div>
+                        @endif
 
                     </div>
                 </div>
@@ -74,6 +101,99 @@
 </section>
 
 
+<section class="bg-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h4 class="h4 border-bottom pb-3">Ulasan Produk</h4>
+                
+                {{-- Daftar Ulasan --}}
+                <div class="review-list mt-4">
+                    @forelse($reviews as $review)
+                        <div class="review-item mb-4 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between">
+                                <strong>{{ $review->user->name }}</strong>
+                                <span class="text-muted small">{{ $review->created_at->format('d M Y') }}</span>
+                            </div>
+                            <div class="text-warning mb-2">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i class="fa fa-star {{ $i <= $review->rating ? '' : 'text-muted' }}"></i>
+                                @endfor
+                            </div>
+                            <p class="mb-0">{{ $review->komentar }}</p>
+                        </div>
+                    @empty
+                        <p class="text-muted">Belum ada ulasan untuk produk ini.</p>
+                    @endforelse
+                </div>
+
+                {{-- Form Tambah Ulasan (Hanya untuk User Login) --}}
+                @auth
+                    <div class="card mt-5 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Tulis Ulasan Anda</h5>
+                            <form action="{{ route('review.store', $product->id_products) }}" method="POST">
+                                @csrf
+                                <div class="mb-3">
+                                    <label class="form-label">Rating</label>
+                                    <select name="rating" class="form-control" required>
+                                        <option value="5">5 - Sangat Puas</option>
+                                        <option value="4">4 - Puas</option>
+                                        <option value="3">3 - Cukup</option>
+                                        <option value="2">2 - Kurang</option>
+                                        <option value="1">1 - Buruk</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Komentar</label>
+                                    <textarea name="komentar" class="form-control" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">Kirim Ulasan</button>
+                            </form>
+                        </div>
+                    </div>
+                @else
+                    <div class="alert alert-light mt-4 text-center">
+                        Silakan <a href="{{ route('login') }}">Login</a> untuk memberikan ulasan.
+                    </div>
+                @endauth
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row text-left p-2 pb-3">
+            <h4>Related Products</h4>
+        </div>
+
+        <div id="carousel-related-product">
+            @forelse($relatedProducts as $related)
+            <div class="p-2 pb-3">
+                <div class="product-wap card rounded-0">
+                    <div class="card rounded-0">
+                        <img class="card-img rounded-0 img-fluid" src="{{ asset('storage/' . $related->gambar) }}">
+                        <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                            <ul class="list-unstyled">
+                                <li><a class="btn btn-success text-white mt-2" href="{{ route('product.detail', $related->id_products) }}"><i class="far fa-eye"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <a href="{{ route('product.detail', $related->id_products) }}" class="h3 text-decoration-none text-dark">{{ $related->nama_products }}</a>
+                        <p class="text-center mb-0">Rp {{ number_format($related->harga, 0, ',', '.') }}</p>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <div class="col-12 text-center">
+                <p class="text-muted">Tidak ada produk terkait lainnya.</p>
+            </div>
+            @endforelse
+        </div>
+    </div>
+</section>
 <!-- FOOTER -->
 <footer class="bg-dark" id="tempaltemo_footer">
     <div class="container">
@@ -115,7 +235,6 @@
         </div>
     </div>
 </footer>
-
 <script src="{{ asset('assets/js/jquery-1.11.0.min.js') }}"></script>
 <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/js/slick.min.js') }}"></script>
