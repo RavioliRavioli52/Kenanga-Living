@@ -1,361 +1,188 @@
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
 
-<head>
-    <title>Kenanga Living - Home</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <head>
+        <title>Kenanga Living - Home</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+        <link rel="apple-touch-icon" href="{{ asset('assets/img/apple-icon.png') }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/img/favicon.ico') }}">
 
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/templatemo.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/templatemo.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css') }}">
 
-    <link rel="apple-touch-icon" href="{{ asset('assets/img/apple-icon.png') }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/img/favicon.ico') }}">
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    </head>
 
-    <!-- Load fonts style after rendering the layout styles -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-    <link rel="stylesheet" href="assets/css/fontawesome.min.css">
-    <!--
+    <body>
 
-TemplateMo 559 Zay Shop
-
-https://templatemo.com/tm-559-zay-shop
-
--->
-</head>
-
-<body>
-    {{-- Navbar --}}
+    {{-- NAVBAR --}}
     @include('homepage.partials.navbar')
+
+    {{-- ALERT PEMBAYARAN --}}
     @if(session('va_number'))
-<div class="container mt-4">
-    <div class="alert alert-success border-0 shadow-sm p-4">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h4 class="alert-heading"><i class="fa fa-check-circle me-2"></i>Pesanan Berhasil!</h4>
-                <p class="mb-0">Silakan selesaikan pembayaran pesanan mabel Anda melalui:</p>
-                <h5 class="mt-2 text-dark">Bank {{ session('bank') }} Virtual Account</h5>
-                <h2 class="display-6 fw-bold text-success">{{ session('va_number') }}</h2>
-            </div>
-            <div class="col-md-4 text-md-end">
-                <p class="text-muted small">Total Tagihan:</p>
-                <h4 class="mb-3">Rp {{ number_format(session('total_bayar'), 0, ',', '.') }}</h4>
-                <button class="btn btn-outline-success btn-sm" onclick="copyVA('{{ session('va_number') }}')">Salin Nomor VA</button>
-            </div>
+    <div class="container mt-4">
+        <div class="alert alert-success shadow-sm p-4 border-0">
+            <h4 class="mb-2">
+                <i class="fa fa-check-circle me-2"></i>Pesanan Berhasil
+            </h4>
+            <p>Silakan lakukan pembayaran melalui:</p>
+            <strong>Bank {{ session('bank') }} Virtual Account</strong>
+            <h3 class="text-success mt-2">{{ session('va_number') }}</h3>
+            <p>Total Tagihan:
+                <strong>Rp {{ number_format(session('total_bayar'), 0, ',', '.') }}</strong>
+            </p>
         </div>
     </div>
-</div>
-<script>
-function copyVA(text) {
-    navigator.clipboard.writeText(text);
-    alert("Nomor VA berhasil disalin!");
-}
-</script>
-@endif
-    <!-- Modal -->
-    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="w-100 pt-1 mb-5 text-right">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{ route('search') }}" method="get" class="modal-content modal-body border-0 p-0">
-                <div class="input-group mb-2">
-                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
-                    <button type="submit" class="input-group-text bg-success text-light">
-                        <i class="fa fa-fw fa-search text-white"></i>
-                    </button>
+    @endif
+
+    {{-- HERO SECTION (PENGGANTI CAROUSEL) --}}
+    <section class="bg-success py-5">
+        <div class="container">
+            <div class="row align-items-center text-white">
+                <div class="col-lg-6">
+                    <h1 class="h1 fw-bold">
+                        Furnitur Berkualitas untuk Rumah & Bisnis Anda
+                    </h1>
+                    <p class="lead mt-3">
+                        Kenanga Living menghadirkan produk furnitur kayu berkualitas tinggi
+                        dengan desain elegan, kokoh, dan tahan lama.
+                    </p>
+                    <p>
+                        Kami melayani kebutuhan furnitur rumah tangga, kantor,
+                        tempat ibadah, hingga custom interior sesuai permintaan.
+                    </p>
+                    <a href="{{ route('shop') }}" class="btn btn-light mt-3 px-4">
+                        Lihat Produk
+                    </a>
                 </div>
-            </form>
-        </div>
-    </div>
-
-
-
-    <!-- Start Banner Hero -->
-    <div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
-        <ol class="carousel-indicators">
-            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="0" class="active"></li>
-            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="1"></li>
-            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <div class="container">
-                    <div class="row p-5">
-                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                            <img class="img-fluid" src="./assets/img/banner_img_01.jpg" alt="">
-                        </div>
-                        <div class="col-lg-6 mb-0 d-flex align-items-center">
-                            <div class="text-align-left align-self-center">
-                                <h1 class="h1 text-success"><b>Kenanga Living</b> eCommerce</h1>
-                                <h3 class="h2">Tiny and Perfect eCommerce Template</h3>
-                                <p>
-                                    Zay Shop is an eCommerce HTML5 CSS template with latest version of Bootstrap 5 (beta
-                                    1).
-                                    This template is 100% free provided by <a rel="sponsored" class="text-success"
-                                        href="https://templatemo.com" target="_blank">TemplateMo</a> website.
-                                    Image credits go to <a rel="sponsored" class="text-success"
-                                        href="https://stories.freepik.com/" target="_blank">Freepik Stories</a>,
-                                    <a rel="sponsored" class="text-success" href="https://unsplash.com/"
-                                        target="_blank">Unsplash</a> and
-                                    <a rel="sponsored" class="text-success" href="https://icons8.com/"
-                                        target="_blank">Icons 8</a>.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-lg-6 text-center">
+                    <img src="{{ asset('assets/img/lemari_thumbnail.jpeg') }}"
+                        class="img-fluid rounded shadow"
+                        alt="Kenanga Living">
                 </div>
-            </div>
-            <div class="carousel-item">
-                <div class="container">
-                    <div class="row p-5">
-                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                            <img class="img-fluid" src="./assets/img/banner_img_02.jpg" alt="">
-                        </div>
-                        <div class="col-lg-6 mb-0 d-flex align-items-center">
-                            <div class="text-align-left">
-                                <h1 class="h1">Proident occaecat</h1>
-                                <h3 class="h2">Aliquip ex ea commodo consequat</h3>
-                                <p>
-                                    You are permitted to use this Zay CSS template for your commercial websites.
-                                    You are <strong>not permitted</strong> to re-distribute the template ZIP file in any
-                                    kind of template collection websites.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <div class="container">
-                    <div class="row p-5">
-                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                            <img class="img-fluid" src="./assets/img/banner_img_03.jpg" alt="">
-                        </div>
-                        <div class="col-lg-6 mb-0 d-flex align-items-center">
-                            <div class="text-align-left">
-                                <h1 class="h1">Repr in voluptate</h1>
-                                <h3 class="h2">Ullamco laboris nisi ut </h3>
-                                <p>
-                                    We bring you 100% free CSS templates for your websites.
-                                    If you wish to support TemplateMo, please make a small contribution via PayPal or
-                                    tell your friends about our website. Thank you.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel"
-            role="button" data-bs-slide="prev">
-            <i class="fas fa-chevron-left"></i>
-        </a>
-        <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel"
-            role="button" data-bs-slide="next">
-            <i class="fas fa-chevron-right"></i>
-        </a>
-    </div>
-    <!-- End Banner Hero -->
-
-
-    <!-- Start Categories of The Month -->
-    <section class="container py-5">
-        <div class="row text-center pt-3">
-            <div class="col-lg-6 m-auto">
-                <h1 class="h1">Categories of The Month</h1>
-                <p>
-                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
-                </p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="./assets/img/category_img_01.jpg" class="rounded-circle img-fluid border"></a>
-                <h5 class="text-center mt-3 mb-3">Watches</h5>
-                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
-            </div>
-            <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="./assets/img/category_img_02.jpg" class="rounded-circle img-fluid border"></a>
-                <h2 class="h5 text-center mt-3 mb-3">Shoes</h2>
-                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
-            </div>
-            <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="./assets/img/category_img_03.jpg" class="rounded-circle img-fluid border"></a>
-                <h2 class="h5 text-center mt-3 mb-3">Accessories</h2>
-                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
             </div>
         </div>
     </section>
-    <!-- End Categories of The Month -->
 
+    {{-- KATEGORI --}}
+    <section class="container py-5">
+        <div class="row text-center pt-3">
+            <div class="col-lg-6 m-auto">
+                <h1 class="h1">Kategori Produk</h1>
+                <p>
+                    Beragam pilihan furnitur untuk memenuhi kebutuhan ruang Anda
+                    dengan kualitas terbaik dan harga bersaing.
+                </p>
+            </div>
+        </div>
 
-    <!-- Start Featured Product -->
+        <div class="row">
+            <div class="col-12 col-md-4 p-5 mt-3 text-center">
+                <img src="{{ asset('assets/img/kursi_thumbnail.jpg') }}" class="rounded-circle img-fluid border">
+                <h5 class="mt-3 mb-2">Kursi</h5>
+                <p>Nyaman, kokoh, dan elegan untuk ruang tamu dan keluarga.</p>
+            </div>
+
+            <div class="col-12 col-md-4 p-5 mt-3 text-center">
+                <img src="{{ asset('assets/img/meja_belajar_thumbnail.jpg') }}" class="rounded-circle img-fluid border">
+                <h5 class="mt-3 mb-2">Meja & Lemari</h5>
+                <p>Solusi penyimpanan dan meja multifungsi dengan desain modern.</p>
+            </div>
+
+            <div class="col-12 col-md-4 p-5 mt-3 text-center">
+                <img src="{{ asset('assets/img/tempat_tidur_thumbnail.jpg') }}" class="rounded-circle img-fluid border">
+                <h5 class="mt-3 mb-2">Tempat Tidur & Dekorasi</h5>
+                <p>Tempat tidur dan dekorasi yang nyaman dan menarik.</p>
+            </div>
+        </div>
+    </section>
+
+    {{-- FEATURED PRODUCT --}}
     <section class="bg-light">
         <div class="container py-5">
             <div class="row text-center py-3">
                 <div class="col-lg-6 m-auto">
-                    <h1 class="h1">Featured Product</h1>
+                    <h1 class="h1">Produk Unggulan</h1>
                     <p>
-                        Reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        Excepteur sint occaecat cupidatat non proident.
+                        Produk pilihan dengan kualitas terbaik dan banyak diminati pelanggan.
                     </p>
                 </div>
             </div>
+
             <div class="row">
-                @forelse($featuredProducts as $product)
-                <div class="col-4 mb-4">
-                    <div class="card h-100">
-                        <a href="{{ route('product.detail', $product->id_products) }}" class="text-decoration-none">
-                            <img src="{{ asset('storage/' . $product->gambar) }}" class="card-img-top"
-                                alt="{{ $product->nama_products }}"
-                                onerror="this.src='{{ asset('assets/img/feature_prod_01.jpg') }}'">
-                        </a>
-                        <div class="card-body">
-                            <ul class="list-unstyled d-flex justify-content-between">
-                                <li>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                </li>
-                                <li class="text-muted text-right">Rp {{ number_format($product->harga, 0, ',', '.') }}</li>
-                            </ul>
-                            <a href="{{ route('product.detail', $product->id_products) }}" class="h2 text-decoration-none text-dark">{{ $product->nama_products }}</a>
-                            <p class="card-text">
-                                {{ Str::limit($product->deskripsi_products ?? 'Produk berkualitas tinggi untuk kebutuhan rumah Anda.', 80) }}
-                            </p>
-                            <p class="text-muted">Kategori: {{ $product->category->nama_categories ?? 'Umum' }}</p>
-                        </div>
+                <div class="col-12 col-md-4 p-5 mt-3 text-center">
+                    <div class="category-img">
+                        <img src="{{ asset('assets/img/kursi_thumbnail.jpg') }}" alt="Kursi">
                     </div>
+                    <h5 class="mt-3 mb-2">Kursi</h5>
+                    <p>Nyaman, kokoh, dan elegan untuk ruang tamu dan keluarga.</p>
                 </div>
-                @empty
-                <div class="col-12">
-                    <p class="text-center text-muted">Belum ada produk featured.</p>
+
+                <div class="col-12 col-md-4 p-5 mt-3 text-center">
+                    <div class="category-img">
+                        <img src="{{ asset('assets/img/meja_belajar_thumbnail.jpg') }}" alt="Meja & Lemari">
+                    </div>
+                    <h5 class="mt-3 mb-2">Meja & Lemari</h5>
+                    <p>Solusi penyimpanan dan meja multifungsi dengan desain modern.</p>
                 </div>
-                @endforelse
+
+                <div class="col-12 col-md-4 p-5 mt-3 text-center">
+                    <div class="category-img">
+                        <img src="{{ asset('assets/img/tempat_tidur_thumbnail.jpg') }}" alt="Tempat Tidur">
+                    </div>
+                    <h5 class="mt-3 mb-2">Tempat Tidur & Dekorasi</h5>
+                    <p>Tempat tidur dan dekorasi yang nyaman dan menarik.</p>
+                </div>
             </div>
+        </div>
     </section>
-    <!-- End Featured Product -->
 
-
-    <!-- Start Footer -->
+    {{-- FOOTER (INLINE – JANGAN INCLUDE) --}}
     <footer class="bg-dark" id="tempaltemo_footer">
         <div class="container">
             <div class="row">
 
                 <div class="col-md-4 pt-5">
-                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">Kenanga Living</h2>
-                    <ul class="list-unstyled text-light footer-link-list">
-                        <li>
-                            <i class="fas fa-map-marker-alt fa-fw"></i>
-                            Jl. Kenanga V no.22 Kec. Lembang Kab. Bandung Barat, Jawa Barat 40391
-                        </li>
-                        <li>
-                            <i class="fa fa-phone fa-fw"></i>
-                            <a class="text-decoration-none" href="tel:081320578707">081320578707</a>
-                        </li>
-                        <li>
-                            <i class="fa fa-envelope fa-fw"></i>
-                            <a class="text-decoration-none" href="mailto:info@kenangaliving.com">info@kenangaliving.com</a>
-                        </li>
-                    </ul>
+                    <h2 class="h2 text-success border-bottom pb-3 border-light">Kenanga Living</h2>
+                    <p class="text-light">
+                        Produsen furnitur kayu berkualitas tinggi untuk kebutuhan rumah dan bisnis Anda.
+                    </p>
                 </div>
 
                 <div class="col-md-4 pt-5">
-                    <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
-                    <ul class="list-unstyled text-light footer-link-list">
-                        <li><a class="text-decoration-none" href="#">Kursi</a></li>
-                        <li><a class="text-decoration-none" href="#">Meja</a></li>
-                        <li><a class="text-decoration-none" href="#">Lemari</a></li>
-                        <li><a class="text-decoration-none" href="#">Frame Kasur</a></li>
-                        <li><a class="text-decoration-none" href="#">Kitchen Set</a></li>
-                        <li><a class="text-decoration-none" href="#">Mimbar</a></li>
-                        <li><a class="text-decoration-none" href="#">Lainnya</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-md-4 pt-5">
-                    <h2 class="h2 text-light border-bottom pb-3 border-light">Further Info</h2>
+                    <h2 class="h2 text-light border-bottom pb-3 border-light">Informasi</h2>
                     <ul class="list-unstyled text-light footer-link-list">
                         <li><a class="text-decoration-none" href="{{ route('home') }}">Home</a></li>
                         <li><a class="text-decoration-none" href="{{ route('about') }}">About Us</a></li>
-                        <li><a class="text-decoration-none" href="{{ route('shop') }}">Shop Locations</a></li>
-                        <li><a class="text-decoration-none" href="#">FAQs</a></li>
+                        <li><a class="text-decoration-none" href="{{ route('shop') }}">Shop</a></li>
                         <li><a class="text-decoration-none" href="{{ route('contact') }}">Contact</a></li>
                     </ul>
                 </div>
 
-            </div>
+                <div class="col-md-4 pt-5">
+                    <h2 class="h2 text-light border-bottom pb-3 border-light">Kontak</h2>
+                    <p class="text-light">
+                        Jl. Kenanga V No.22<br>
+                        Bandung Barat<br>
+                        0813-2057-8707
+                    </p>
+                </div>
 
-            <div class="row text-light mb-4">
-                <div class="col-12 mb-3">
-                    <div class="w-100 my-3 border-top border-light"></div>
-                </div>
-                <div class="col-auto me-auto">
-                    <ul class="list-inline text-left footer-icons">
-                        <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank" href="http://facebook.com/"><i
-                                    class="fab fa-facebook-f fa-lg fa-fw"></i></a>
-                        </li>
-                        <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank"
-                                href="https://www.instagram.com/"><i class="fab fa-instagram fa-lg fa-fw"></i></a>
-                        </li>
-                        <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank" href="https://twitter.com/"><i
-                                    class="fab fa-twitter fa-lg fa-fw"></i></a>
-                        </li>
-                        <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank"
-                                href="https://www.linkedin.com/"><i class="fab fa-linkedin fa-lg fa-fw"></i></a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-auto">
-                    <label class="sr-only" for="subscribeEmail">Email address</label>
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control bg-dark border-light" id="subscribeEmail"
-                            placeholder="Email address">
-                        <div class="input-group-text btn-success text-light">Subscribe</div>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <div class="w-100 bg-black py-3">
-            <div class="container">
-                <div class="row pt-2">
-                    <div class="col-12">
-                        <p class="text-left text-light">
-                            Copyright &copy; 2025 Kenanga Living
-                              Created by Kelompok 4
-                            | Designed by <a rel="sponsored" href="https://templatemo.com"
-                                target="_blank">TemplateMo</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <div class="w-100 bg-black py-3 text-center">
+            <p class="text-light mb-0">
+                © 2025 Kenanga Living | Kelompok 4
+            </p>
         </div>
-
     </footer>
-    <!-- End Footer -->
 
-    <!-- Start Script -->
-    <script src="assets/js/jquery-1.11.0.min.js"></script>
-    <script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/templatemo.js"></script>
-    <script src="assets/js/custom.js"></script>
-    <!-- End Script -->
-</body>
-
-</html>
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+    </body>
+    </html>
