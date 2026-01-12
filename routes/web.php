@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ProductController;
@@ -14,11 +15,14 @@ Route::middleware(['web'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('homepage.home');
 });
 
-// ✅ Admin Dashboard
-Route::group(['middleware' => ['web', 'auth'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
-    Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard.index');
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
     Route::resource('products', AdminProductController::class);
+    Route::resource('categories', AdminCategoryController::class);
 });
+
 
 // ✅ Whoami (cek user login)
 Route::get('/whoami', function () {
@@ -38,7 +42,7 @@ Route::get('/wishlist', fn() => view('homepage.wishlist'))->name('wishlist');
 
 // ✅ Shop & Produk
 Route::get('/shop', [ProductController::class, 'index'])->name('shop');
-Route::get('/shop-single/{id}', [ProductController::class, 'show'])->name('shop-single');
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.detail');
 
 // ✅ Search Produk
 Route::get('/search', [SearchController::class, 'search'])->name('search');

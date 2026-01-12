@@ -1,192 +1,95 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Edit Produk</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-    <div class="container py-4">
-        <div class="row">
-            <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h1 class="h2"><i class="fas fa-edit"></i> Edit Produk</h1>
-                    <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Kembali
-                    </a>
-                </div>
+@extends('admin.layouts.app')
 
-                @if($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <ul class="mb-0">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
+@section('content')
+<h1 class="h3 mb-4 text-gray-800">Edit Produk</h1>
+
+<div class="card shadow">
+    <div class="card-body">
+        <form action="{{ route('products.update', $product) }}"
+              method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+
+            {{-- Nama Produk --}}
+            <div class="form-group">
+                <label>Nama Produk</label>
+                <input type="text" name="nama_products"
+                       class="form-control @error('nama_products') is-invalid @enderror"
+                       value="{{ old('nama_products', $product->nama_products) }}">
+                @error('nama_products')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            {{-- Kategori --}}
+            <div class="form-group">
+                <label>Kategori</label>
+                <select name="id_categories"
+                        class="form-control @error('id_categories') is-invalid @enderror">
+                    @foreach($categories as $c)
+                        <option value="{{ $c->id_categories }}"
+                            {{ old('id_categories', $product->id_categories) == $c->id_categories ? 'selected' : '' }}>
+                            {{ $c->nama_categories }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('id_categories')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            {{-- Deskripsi --}}
+            <div class="form-group">
+                <label>Deskripsi</label>
+                <textarea name="deskripsi_products"
+                          class="form-control"
+                          rows="3">{{ old('deskripsi_products', $product->deskripsi_products) }}</textarea>
+            </div>
+
+            {{-- Harga --}}
+            <div class="form-group">
+                <label>Harga</label>
+                <input type="number" name="harga"
+                       class="form-control"
+                       value="{{ old('harga', $product->harga) }}">
+            </div>
+
+            {{-- Stok --}}
+            <div class="form-group">
+                <label>Stok</label>
+                <input type="number" name="stok"
+                       class="form-control"
+                       value="{{ old('stok', $product->stok) }}">
+            </div>
+
+            {{-- Gambar --}}
+            <div class="form-group">
+                <label>Gambar Produk</label><br>
+
+                @if($product->gambar)
+                    <img src="{{ asset('storage/'.$product->gambar) }}"
+                         class="img-thumbnail mb-2" width="150">
                 @endif
 
-                <div class="card">
-                    <div class="card-body">
-                        <form action="{{ route('admin.products.update', $product->id_products) }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-                            
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="mb-3">
-                                        <label for="nama_products" class="form-label">Nama Produk <span class="text-danger">*</span></label>
-                                        <input type="text" 
-                                               class="form-control @error('nama_products') is-invalid @enderror" 
-                                               id="nama_products" 
-                                               name="nama_products" 
-                                               value="{{ old('nama_products', $product->nama_products) }}" 
-                                               required>
-                                        @error('nama_products')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="id_categories" class="form-label">Kategori <span class="text-danger">*</span></label>
-                                        <select class="form-select @error('id_categories') is-invalid @enderror" 
-                                                id="id_categories" 
-                                                name="id_categories" 
-                                                required>
-                                            <option value="">Pilih Kategori</option>
-                                            @foreach($categories as $category)
-                                                <option value="{{ $category->id_categories }}" 
-                                                        {{ old('id_categories', $product->id_categories) == $category->id_categories ? 'selected' : '' }}>
-                                                    {{ $category->nama_categories }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('id_categories')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="deskripsi_products" class="form-label">Deskripsi Produk</label>
-                                        <textarea class="form-control @error('deskripsi_products') is-invalid @enderror" 
-                                                  id="deskripsi_products" 
-                                                  name="deskripsi_products" 
-                                                  rows="4">{{ old('deskripsi_products', $product->deskripsi_products) }}</textarea>
-                                        @error('deskripsi_products')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="harga" class="form-label">Harga <span class="text-danger">*</span></label>
-                                            <div class="input-group">
-                                                <span class="input-group-text">Rp</span>
-                                                <input type="number" 
-                                                       class="form-control @error('harga') is-invalid @enderror" 
-                                                       id="harga" 
-                                                       name="harga" 
-                                                       value="{{ old('harga', $product->harga) }}" 
-                                                       min="0" 
-                                                       step="1000" 
-                                                       required>
-                                                @error('harga')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 mb-3">
-                                            <label for="stok" class="form-label">Stok</label>
-                                            <input type="number" 
-                                                   class="form-control @error('stok') is-invalid @enderror" 
-                                                   id="stok" 
-                                                   name="stok" 
-                                                   value="{{ old('stok', $product->stok) }}" 
-                                                   min="0">
-                                            @error('stok')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label for="gambar" class="form-label">Gambar Produk</label>
-                                        <input type="file" 
-                                               class="form-control @error('gambar') is-invalid @enderror" 
-                                               id="gambar" 
-                                               name="gambar" 
-                                               accept="image/*"
-                                               onchange="previewImage(this)">
-                                        @error('gambar')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                        <small class="text-muted">Biarkan kosong jika tidak ingin mengubah gambar. Format: JPEG, PNG, JPG, GIF. Max: 2MB</small>
-                                        
-                                        <div class="mt-3">
-                                            <p class="small text-muted mb-1">Gambar Saat Ini:</p>
-                                            <img src="{{ asset('assets/img/' . $product->gambar) }}" 
-                                                 alt="{{ $product->nama_products }}" 
-                                                 id="currentImage"
-                                                 class="img-fluid rounded" 
-                                                 style="max-height: 200px; width: 100%; object-fit: cover;"
-                                                 onerror="this.src='{{ asset('assets/img/shop_01.jpg') }}'">
-                                        </div>
-                                        
-                                        <div class="mt-3">
-                                            <img id="imagePreview" 
-                                                 src="" 
-                                                 alt="Preview" 
-                                                 class="img-fluid rounded d-none" 
-                                                 style="max-height: 200px; width: 100%; object-fit: cover;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-end gap-2">
-                                <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Batal</a>
-                                <button type="submit" class="btn btn-success">
-                                    <i class="fas fa-save"></i> Update Produk
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                <input type="file" name="gambar" class="form-control-file"
+                       onchange="previewImage(this)">
+                <img id="preview" class="img-thumbnail mt-3 d-none" width="150">
             </div>
-        </div>
+
+            <button class="btn btn-primary">Update</button>
+            <a href="{{ route('products.index') }}" class="btn btn-secondary">Kembali</a>
+        </form>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function previewImage(input) {
-            const preview = document.getElementById('imagePreview');
-            const currentImage = document.getElementById('currentImage');
-            
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.classList.remove('d-none');
-                    if (currentImage) {
-                        currentImage.style.opacity = '0.5';
-                    }
-                }
-                reader.readAsDataURL(input.files[0]);
-            } else {
-                preview.classList.add('d-none');
-                if (currentImage) {
-                    currentImage.style.opacity = '1';
-                }
-            }
-        }
-    </script>
-</body>
-</html>
-
-
+<script>
+function previewImage(input) {
+    const preview = document.getElementById('preview');
+    const file = input.files[0];
+    if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove('d-none');
+    }
+}
+</script>
+@endsection

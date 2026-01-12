@@ -21,7 +21,7 @@
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
     <link rel="stylesheet" href="assets/css/fontawesome.min.css">
     <!--
-    
+
 TemplateMo 559 Zay Shop
 
 https://templatemo.com/tm-559-zay-shop
@@ -37,7 +37,7 @@ https://templatemo.com/tm-559-zay-shop
                 <div>
                     <i class="fa fa-envelope mx-2"></i>
                     <a class="navbar-sm-brand text-light text-decoration-none"
-                        href="mailto:info@company.com">info@company.com</a>
+                        href="mailto:info@company.com">kenangaliving@gmail.com</a>
                     <i class="fa fa-phone mx-2"></i>
                     <a class="navbar-sm-brand text-light text-decoration-none" href="tel:010-020-0340">010-020-0340</a>
                 </div>
@@ -61,8 +61,8 @@ https://templatemo.com/tm-559-zay-shop
     <nav class="navbar navbar-expand-lg navbar-light shadow">
         <div class="container d-flex justify-content-between align-items-center">
 
-            <a class="navbar-brand text-success logo h1 align-self-center" href="index.html">
-                Zay
+            <a class="navbar-brand text-success logo h1 align-self-center" href="#">
+                Kenanga
             </a>
 
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
@@ -104,33 +104,31 @@ https://templatemo.com/tm-559-zay-shop
                     </a>
                     <div class="nav-icon position-relative text-decoration-none dropdown">
 
-                        @auth
-                            <a class="nav-icon position-relative text-decoration-none dropdown-toggle" href="#"
-                                id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-fw fa-user text-dark mr-3"></i>
-                            </a>
+                        {{-- Auth Button --}}
+                        <div class="d-flex">
+                            @auth
+                                <a href="{{ route('admin.dashboard') }}" class="btn btn-success me-2">
+                                    Dashboard
+                                </a>
 
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger">
+                                        Logout
+                                    </button>
+                                </form>
+                            @endauth
 
-                                <li>
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item">Log Out</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        @else
-                            <a class="nav-icon position-relative text-decoration-none mx-2" href="{{ route('login') }}">
-                                <i class="fa fa-fw fa-user text-dark mr-3"></i>
-                            </a>
-                            <a class="nav-icon position-relative text-decoration-none" href="{{ route('login') }}">
-                                Login
-                            </a>
-                        @endauth
+                            @guest
+                                <a href="{{ route('login') }}" class="btn btn-outline-success me-2  ">
+                                    Login
+                                </a>
+
+                                <a href="{{ route('register') }}" class="btn btn-outline-success">
+                                    Register
+                                </a>
+                            @endguest
+                        </div>
 
                     </div>
 
@@ -177,7 +175,7 @@ https://templatemo.com/tm-559-zay-shop
                         </div>
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left align-self-center">
-                                <h1 class="h1 text-success"><b>Zay</b> eCommerce</h1>
+                                <h1 class="h1 text-success"><b>Kenanga Living</b> eCommerce</h1>
                                 <h3 class="h2">Tiny and Perfect eCommerce Template</h3>
                                 <p>
                                     Zay Shop is an eCommerce HTML5 CSS template with latest version of Bootstrap 5 (beta
@@ -297,7 +295,7 @@ https://templatemo.com/tm-559-zay-shop
                 @forelse($featuredProducts as $product)
                 <div class="col-4 mb-4">
                     <div class="card h-100">
-                        <a href="{{ route('shop-single', $product->id_products) }}" class="text-decoration-none">
+                        <a href="{{ route('product.detail', $product->id_products) }}" class="text-decoration-none">
                             <img src="{{ asset('assets/img/' . $product->gambar) }}" class="card-img-top"
                                 alt="{{ $product->nama_products }}"
                                 onerror="this.src='{{ asset('assets/img/feature_prod_01.jpg') }}'">
@@ -313,7 +311,7 @@ https://templatemo.com/tm-559-zay-shop
                                 </li>
                                 <li class="text-muted text-right">Rp {{ number_format($product->harga, 0, ',', '.') }}</li>
                             </ul>
-                            <a href="{{ route('shop-single', $product->id_products) }}" class="h2 text-decoration-none text-dark">{{ $product->nama_products }}</a>
+                            <a href="{{ route('product.detail', $product->id_products) }}" class="h2 text-decoration-none text-dark">{{ $product->nama_products }}</a>
                             <p class="card-text">
                                 {{ Str::limit($product->deskripsi_products ?? 'Produk berkualitas tinggi untuk kebutuhan rumah Anda.', 80) }}
                             </p>
@@ -420,7 +418,7 @@ https://templatemo.com/tm-559-zay-shop
                 <div class="row pt-2">
                     <div class="col-12">
                         <p class="text-left text-light">
-                            Copyright &copy; 2025 Kenanga Living 
+                            Copyright &copy; 2025 Kenanga Living
                               Created by Kelompok 4
                             | Designed by <a rel="sponsored" href="https://templatemo.com"
                                 target="_blank">TemplateMo</a>

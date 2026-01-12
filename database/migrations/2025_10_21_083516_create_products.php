@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id('id_products');
-            $table->foreignId('id_categories')->constrained('categories', 'id_categories');
+            $table->foreignId('id_categories')->constrained('categories', 'id_categories')->cascadeOnDelete();
             $table->string('nama_products', 100);
             $table->string('deskripsi_products', 255)->nullable();
             $table->decimal('harga', 12, 2);

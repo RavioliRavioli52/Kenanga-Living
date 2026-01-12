@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -12,25 +13,18 @@ class SearchController extends Controller
      */
     public function search(Request $request)
     {
-        $query = $request->get('q', '');
-        
-        // Jika query kosong, redirect kembali dengan pesan
-        if (empty(trim($query))) {
-            return redirect()->route('home')->with('search_error', 'Masukkan kata kunci untuk mencari produk.');
-        }
+        $query = $request->q;
 
-        // Mencari produk berdasarkan nama atau deskripsi
-        $products = Product::where(function($q) use ($query) {
-                $q->where('nama_products', 'LIKE', '%' . $query . '%')
-                  ->orWhere('deskripsi_products', 'LIKE', '%' . $query . '%');
-            })
-            ->orderBy('nama_products', 'asc')
-            ->paginate(12);
+        $products = Product::where('nama_products', 'like', "%$query%")
+            ->paginate(9);
 
-        return view('homepage.search-results', [
-            'products' => $products,
-            'query' => $query
-        ]);
+        $categories = Category::orderBy('nama_categories')->get();
+
+        return view('homepage.search-results', compact(
+            'products',
+            'query',
+            'categories'
+        ));
     }
 }
 
