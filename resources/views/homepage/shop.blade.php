@@ -11,27 +11,82 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/templatemo.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css') }}">
 
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-    <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css') }}">
+
+    <!-- ================= CARD STYLE ================= -->
+    <style>
+        .product-wap {
+            border: none;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .product-wap:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 35px rgba(0,0,0,0.15);
+        }
+
+        .product-wap img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .product-wap .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .product-wap .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .product-wap .category {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .product-wap .price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #59ab6e;
+            margin-bottom: 12px;
+        }
+
+        .product-wap .btn {
+            border-radius: 20px;
+            padding: 6px 20px;
+        }
+    </style>
 </head>
 
 <body>
 
-{{-- Navbar --}}
-    @include('homepage.partials.navbar')
+{{-- NAVBAR --}}
+@include('homepage.partials.navbar')
 
 {{-- ================= CONTENT ================= --}}
 <div class="container py-5">
     <div class="row">
 
-        {{-- ===== FILTER SIDEBAR ===== --}}
+        {{-- FILTER SIDEBAR --}}
         <div class="col-lg-3">
             <h4 class="pb-3">Filter Produk</h4>
 
             <form method="GET" action="{{ route('shop') }}">
-
                 <h6>Jenis Barang</h6>
                 @foreach($categories as $category)
                     <div class="form-check">
@@ -59,45 +114,41 @@
             </form>
         </div>
 
-        {{-- ===== PRODUCT LIST ===== --}}
+        {{-- PRODUCT LIST --}}
         <div class="col-lg-9">
-
-            <h2 class="mb-4">
-                @if(request('category'))
-                    {{ optional($categories->where('id_categories', request('category'))->first())->nama_categories }}
-                @else
-                    Semua Produk
-                @endif
-            </h2>
+            <h2 class="mb-4">Semua Produk</h2>
 
             <div class="row">
                 @forelse($products as $product)
                     <div class="col-md-4 mb-4">
-                        <div class="card h-100 product-wap">
-                            <img class="card-img-top"
-                                 src="{{ asset('storage/' . $product->gambar) }}"
+                        <div class="card product-wap">
+                            <img src="{{ asset('storage/' . $product->gambar) }}"
                                  alt="{{ $product->nama_products }}">
 
-                            <div class="card-body text-center">
-                                <h5 class="card-title">
+                            <div class="card-body">
+                                <div>
+                                    <h5 class="card-title">
+                                        <a href="{{ route('product.detail', $product->id_products) }}"
+                                           class="text-dark text-decoration-none">
+                                            {{ $product->nama_products }}
+                                        </a>
+                                    </h5>
+
+                                    <div class="category">
+                                        {{ $product->category->nama_categories ?? '-' }}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="price">
+                                        Rp {{ number_format($product->harga, 0, ',', '.') }}
+                                    </div>
+
                                     <a href="{{ route('product.detail', $product->id_products) }}"
-                                       class="text-dark text-decoration-none">
-                                        {{ $product->nama_products }}
+                                       class="btn btn-outline-success btn-sm">
+                                        Detail
                                     </a>
-                                </h5>
-
-                                <p class="text-muted">
-                                    {{ $product->category->nama_categories ?? '-' }}
-                                </p>
-
-                                <p class="fw-bold text-success">
-                                    Rp {{ number_format($product->harga, 0, ',', '.') }}
-                                </p>
-
-                                <a href="{{ route('product.detail', $product->id_products) }}"
-                                   class="btn btn-sm btn-outline-success">
-                                    Detail
-                                </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -112,12 +163,11 @@
             <div class="d-flex justify-content-center">
                 {{ $products->appends(request()->query())->links() }}
             </div>
-
         </div>
     </div>
 </div>
 
-{{-- ================= FOOTER ================= --}}
+{{-- ================= FOOTER (TIDAK DIUBAH) ================= --}}
 <footer class="bg-dark text-light pt-5">
     <div class="container">
         <div class="row">

@@ -10,19 +10,33 @@
 <table class="table table-bordered table-hover">
   <thead>
     <tr>
-      <th>ID</th>
-      <th>User</th>
-      <th>Total</th>
-      <th>Metode</th>
-      <th>Status</th>
-      <th>Aksi</th>
+        <th>ID</th>
+        <th>User</th>
+        <th>Produk Dibeli</th>
+        <th>Total</th>
+        <th>Metode</th>
+        <th>Status</th>
+        <th>Aksi</th>
     </tr>
   </thead>
   <tbody>
     @foreach($orders as $order)
     <tr>
       <td>#{{ $order->id_orders }}</td>
-      <td>{{ $order->id_users }}</td>
+      <td>{{ $order->user->name ?? 'User tidak ditemukan' }}</td>
+        <td style="white-space: normal; max-width: 300px;">
+            <ul class="mb-0 ps-3">
+                @foreach($order->items as $item)
+                    <li>
+                        <strong>{{ $item->product->nama_products ?? 'Produk dihapus' }}</strong><br>
+                        <small class="text-muted">
+                            {{ $item->jumlah }} x
+                            Rp {{ number_format($item->harga_satuan,0,',','.') }}
+                        </small>
+                    </li>
+                @endforeach
+            </ul>
+        </td>
       <td>Rp {{ number_format($order->total_harga,0,',','.') }}</td>
       <td>{{ $order->metode_bayar }}</td>
       <td>
